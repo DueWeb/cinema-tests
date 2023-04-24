@@ -1,4 +1,7 @@
 module.exports = class Acl {
+  
+  // TURN OFF ALL ACL
+  return true;
 
   // Here you can implement ACL
   // return true = allowed, false = forbidden
