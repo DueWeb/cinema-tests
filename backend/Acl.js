@@ -14,7 +14,7 @@ module.exports = class Acl {
 
     // only allow these roles:
     let allowedRoles = ['not logged in', 'logged in', 'not logged in'];
-    if (!allowedRoles.includes[role]) { role = 'not logged in'; }
+    if (!allowedRoles.includes(role)) { role = 'not logged in'; }
 
     // log things
     console.log([
