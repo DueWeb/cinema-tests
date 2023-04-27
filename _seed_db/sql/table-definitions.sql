@@ -55,21 +55,21 @@ CREATE TABLE `bookings` (
 
 
 
-# Dump of table bookingsXseats
+# Dump of table bookingxseats
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `bookingsXseats`;
+DROP TABLE IF EXISTS `bookingxseats`;
 
-CREATE TABLE `bookingsXseats` (
+CREATE TABLE `bookingxseats` (
   `bookingId` int unsigned NOT NULL,
   `seatId` int unsigned NOT NULL,
   `ticketTypeId` int unsigned NOT NULL,
   PRIMARY KEY (`bookingId`,`seatId`),
   KEY `seatId` (`seatId`),
   KEY `ticketTypeId` (`ticketTypeId`),
-  CONSTRAINT `bookingsxseats_ibfk_1` FOREIGN KEY (`bookingId`) REFERENCES `bookings` (`id`),
-  CONSTRAINT `bookingsxseats_ibfk_2` FOREIGN KEY (`seatId`) REFERENCES `seats` (`id`),
-  CONSTRAINT `bookingsxseats_ibfk_3` FOREIGN KEY (`ticketTypeId`) REFERENCES `ticketTypes` (`id`)
+  CONSTRAINT `bookingxseats_ibfk_1` FOREIGN KEY (`bookingId`) REFERENCES `bookings` (`id`),
+  CONSTRAINT `bookingxseats_ibfk_2` FOREIGN KEY (`seatId`) REFERENCES `seats` (`id`),
+  CONSTRAINT `bookingxseats_ibfk_3` FOREIGN KEY (`ticketTypeId`) REFERENCES `ticketTypes` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_sv_0900_ai_ci;
 
 
