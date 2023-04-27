@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "3458bbf1-4c1e-4fe5-84ee-6d0569131841",
+		"_postman_id": "07a0917c-1b07-4fe4-99b2-13b500b3c131",
 		"name": "Cinema-tests",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24652519"
 	},
 	"item": [
 		{
@@ -213,6 +214,175 @@
 							"    // \"loop\" - add the next user by repeating this request",
 							"    pm.environment.set('userIndex', userIndex);",
 							"    postman.setNextRequest('Read users');",
+							"}",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/api/users/{{id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"users",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update users",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let mockData = JSON.parse(pm.environment.get('mockData'));",
+							"let userIndex = +pm.environment.get('userIndex');",
+							"let user = mockData[userIndex];",
+							"",
+							"user.firstName = \"This is another another firstname\";",
+							"user.lastName = \"This is another lastname\";",
+							"mockData[userIndex] = user;",
+							"pm.environment.set('mockData', JSON.stringify(mockData));",
+							"pm.environment.set('id', user.id);",
+							"",
+							"for(let [key,val] of Object.entries(user)) {",
+							"    pm.environment.set(key, val);",
+							"} ",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							" let res = pm.response.json();",
+							"let mockData = JSON.parse(pm.environment.get('mockData'));",
+							"",
+							"let userIndex = +pm.environment.get('userIndex');",
+							"let user = mockData[userIndex];",
+							"",
+							"pm.test('Expect status code 200', () => {",
+							"    pm.expect(pm.response.code).to.equal(200)",
+							"});",
+							"",
+							"userIndex++",
+							"if(!mockData[userIndex]) {",
+							"    pm.environment.set('userIndex', 0)",
+							"}",
+							"else {",
+							"    pm.environment.set('userIndex', userIndex)",
+							"    postman.setNextRequest('Update users')",
+							"} "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\",\n    \"firstName\": \"{{firstName}}\",\n    \"lastName\": \"{{lastName}}\",\n    \"phoneNumber\": \"{{phoneNumber}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/api/users/{{id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"users",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Re-read users",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Unpack environment variables into normal local variables",
+							"let mockData = JSON.parse(pm.environment.get('mockData'));",
+							"let userIndex = +pm.environment.get('userIndex');",
+							"// Current user",
+							"let user = mockData[userIndex];",
+							"",
+							"// Set the users id as an environment variable",
+							"pm.environment.set('id', user.id);",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Unpack environment variables into normal local variables",
+							"let mockData = JSON.parse(pm.environment.get('mockData'));",
+							"let userIndex = +pm.environment.get('userIndex');",
+							"// Current user",
+							"let user = mockData[userIndex];",
+							"",
+							"let response = pm.response.json();",
+							"",
+							"// Status code 200 = Ok, no server error",
+							"pm.test('Expect status code 200', () => {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"});",
+							"",
+							"// Test that the mockData previously used to",
+							"// create the user in the DB has indentical values",
+							"// for all properties compared to what we are reading from the DB",
+							"// but omit password from this check...",
+							"// Note: Expect userRole to be null since we haven't set it!",
+							"pm.test('Expect db values to equal original values for user', () => {",
+							"    let userWithoutPassword = {...user, password: null, userRole:null}",
+							"    let responseWithoutPassword = {...response, password: null};",
+							"    pm.expect(userWithoutPassword).to.deep.equal(responseWithoutPassword);",
+							"});",
+							"",
+							"// Add 1 to userIndex and check if there is another user to add",
+							"userIndex++;",
+							"",
+							"if(!mockData[userIndex]){",
+							"    // all users added, reset userIndex to zero for next request",
+							"    pm.environment.set('userIndex','0');",
+							"}",
+							"else {",
+							"    // \"loop\" - add the next user by repeating this request",
+							"    pm.environment.set('userIndex', userIndex);",
+							"    postman.setNextRequest('Re-read users');",
 							"}",
 							""
 						],
