@@ -1,7 +1,4 @@
 module.exports = class Acl {
-  
-  // TURN OFF ALL ACL
-  return true;
 
   // Here you can implement ACL
   // return true = allowed, false = forbidden
@@ -9,6 +6,9 @@ module.exports = class Acl {
   // req.sesssion.user -> logged in user if any
 
   static checkRoute(req, table, method, isTable, isView) {
+    
+    // TURN OFF ALL ACL
+    return true;
 
     // role not logged in, logged in or special (admin etc.)
     let role = req.session.user ?
